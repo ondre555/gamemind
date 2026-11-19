@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#101522">
+<title>GAMEMIND — Play smart. Live balanced.</title>
+<style>
+:root{--bg:#0d1220;--panel:#171f31;--panel2:#202b40;--text:#f3f6ff;--muted:#9aa8bf;--accent:#8b7cff;--cyan:#45d6c5;--line:#2b3850}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 80% 0%,#25204a 0,transparent 34%),var(--bg);color:var(--text);font:15px/1.5 Inter,system-ui,Arial,sans-serif}
+.wrap{max-width:1120px;margin:auto;padding:24px}.top{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:25px}.brand{font-weight:900;font-size:25px;letter-spacing:1.5px}.brand span{color:var(--accent)}.tag{color:var(--muted);font-size:12px}.nav{display:flex;gap:8px;flex-wrap:wrap}.nav button,.btn{border:1px solid var(--line);background:var(--panel);color:var(--text);padding:10px 14px;border-radius:12px;cursor:pointer;font-weight:650}.nav button.active,.btn.primary{background:var(--accent);border-color:var(--accent);color:white}.grid{display:grid;grid-template-columns:1.25fr .75fr;gap:18px}.panel{background:linear-gradient(145deg,rgba(30,40,60,.96),rgba(20,28,44,.96));border:1px solid var(--line);border-radius:20px;padding:22px;box-shadow:0 15px 40px #0002}.panel h2{margin:0 0 14px;font-size:18px}.muted{color:var(--muted)}.timer{text-align:center;padding:18px 0 10px}.time{font-size:clamp(48px,9vw,76px);font-weight:850;letter-spacing:2px;font-variant-numeric:tabular-nums}.timer-actions{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:18px}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.stat{background:var(--panel2);padding:15px;border-radius:15px}.stat b{display:block;font-size:23px}.stat small{color:var(--muted)}.field{width:100%;background:#101827;border:1px solid var(--line);border-radius:11px;padding:11px;color:var(--text);margin:7px 0 12px}.row{display:flex;align-items:center;justify-content:space-between;gap:10px}.hidden{display:none!important}.calendar-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}.calendar{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}.day,.dow{text-align:center;padding:9px 2px;border-radius:9px;font-size:13px}.dow{color:var(--muted);font-weight:700}.day{background:#111a2a;min-height:42px;cursor:pointer;border:1px solid transparent}.day.has{background:#37315f;border-color:#6458a8}.day.today{outline:2px solid var(--cyan)}.day.selected{border-color:var(--cyan)}.day.empty{background:transparent;cursor:default}.list{display:grid;gap:9px}.item{background:var(--panel2);border-radius:12px;padding:12px;display:flex;justify-content:space-between;gap:10px}.badge{background:#302b54;border:1px solid #574e91;border-radius:20px;padding:4px 9px;font-size:12px;color:#d7d1ff}.achievement{display:flex;gap:12px;align-items:center}.achievement .ico{font-size:25px}.progress{height:8px;background:#101827;border-radius:10px;overflow:hidden;margin-top:8px}.progress span{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--cyan));width:0}.section{margin-top:18px}.foot{text-align:center;color:var(--muted);font-size:12px;margin:22px 0 5px}
+@media(max-width:760px){.wrap{padding:15px}.top{align-items:flex-start;flex-direction:column}.grid{grid-template-columns:1fr}.stats{grid-template-columns:repeat(3,1fr)}.panel{padding:17px}.day{min-height:37px;padding:7px 1px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="top"><div><div class="brand">GAME<span>MIND</span></div><div class="tag">PLAY SMART. LIVE BALANCED.</div></div><nav class="nav"><button class="active" data-tab="home">Главная</button><button data-tab="calendar">Календарь</button><button data-tab="achievements">Достижения</button></nav></header>
+<main>
+<section id="home">
+<div class="grid">
+<div class="panel">
+<div class="row"><h2>Игровой таймер</h2><span class="badge" id="timerStatus">Не запущен</span></div>
+<div class="timer"><div class="time" id="clock">00:00:00</div><div class="muted">Следи за временем и сохраняй баланс</div>
+<div class="timer-actions"><button class="btn primary" id="startBtn">▶ Начать</button><button class="btn" id="stopBtn" disabled>■ Завершить и сохранить</button></div></div>
+<label class="muted" for="gameName">Во что играешь?</label><input class="field" id="gameName" maxlength="40" placeholder="Например, Minecraft">
+</div>
+<div class="panel"><h2>Твоя статистика</h2><div class="stats"><div class="stat"><b id="totalTime">0ч</b><small>Всего</small></div><div class="stat"><b id="sessions">0</b><small>Сессий</small></div><div class="stat"><b id="level">1</b><small>Уровень</small></div></div><div class="section"><div class="row"><span class="muted">До следующего уровня</span><b id="xpLabel">0 / 60 мин</b></div><div class="progress"><span id="xpBar"></span></div></div></div>
+</div>
+<div class="panel section"><div class="row"><h2>Последние игровые сессии</h2><span class="muted" id="historyCount">0 записей</span></div><div class="list" id="history"><div class="muted">Пока нет записей. Запусти таймер!</div></div></div>
+</section>
+<section id="calendar" class="hidden">
+<div class="panel"><div class="calendar-head"><button class="btn" id="prevMonth">←</button><h2 id="monthTitle"></h2><button class="btn" id="nextMonth">→</button></div><div class="calendar" id="calendarGrid"></div><div class="section"><h2 id="dayTitle">Выбери день</h2><div class="muted" id="dayInfo">Нажми на дату, чтобы посмотреть игровое время.</div></div></div>
+</section>
+<section id="achievements" class="hidden">
+<div class="panel"><h2>Достижения</h2><p class="muted">Играй осознанно, записывай время и открывай награды.</p><div class="list" id="achievementList"></div></div>
+</section>
+</main><div class="foot">GAMEMIND · Данные хранятся только в этом браузере на этом устройстве</div>
+</div>
+<script>
+const KEY='gamemind_sessions_v1';let sessions=JSON.parse(localStorage.getItem(KEY)||'[]');let running=false,startedAt=0,elapsed=0,tick=null,viewDate=new Date(),selectedDate=new Date();
+const $=id=>document.getElementById(id);const pad=n=>String(n).padStart(2,'0');const fmt=ms=>{let s=Math.floor(ms/1000);return `${pad(Math.floor(s/3600))}:${pad(Math.floor(s%3600/60))}:${pad(s%60)}`};const dayKey=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;const duration=ms=>{let m=Math.round(ms/60000);return m>=60?`${Math.floor(m/60)}ч ${m%60}м`:`${m}м`};const total=()=>sessions.reduce((a,s)=>a+s.ms,0);
+function save(){localStorage.setItem(KEY,JSON.stringify(sessions))}
+function render(){let t=total(),mins=Math.floor(t/60000),lvl=Math.floor(mins/60)+1,into=mins%60;$('totalTime').textContent=duration(t);$('sessions').textContent=sessions.length;$('level').textContent=lvl;$('xpLabel').textContent=`${into} / 60 мин`;$('xpBar').style.width=(into/60*100)+'%';$('historyCount').textContent=`${sessions.length} записей`;let h=$('history');h.innerHTML=sessions.length?'':'<div class="muted">Пока нет записей. Запусти таймер!</div>';sessions.slice().reverse().slice(0,8).forEach(s=>{let d=new Date(s.date);let el=document.createElement('div');el.className='item';el.innerHTML=`<div><b>${escapeHtml(s.game||'Без названия')}</b><div class="muted">${d.toLocaleDateString('ru-RU')} · ${d.toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'})}</div></div><b>${duration(s.ms)}</b>`;h.append(el)});renderAchievements();renderCalendar()}
+function escapeHtml(s){return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+$('startBtn').onclick=()=>{if(!running){running=true;startedAt=Date.now()-elapsed;$('timerStatus').textContent='Идёт';$('startBtn').textContent='Ⅱ Пауза';$('stopBtn').disabled=false;tick=setInterval(()=>$('clock').textContent=fmt(Date.now()-startedAt),250)}else{clearInterval(tick);elapsed=Date.now()-startedAt;running=false;$('timerStatus').textContent='Пауза';$('startBtn').textContent='▶ Продолжить'}};
+$('stopBtn').onclick=()=>{let ms=running?Date.now()-startedAt:elapsed;clearInterval(tick);if(ms>=1000){sessions.push({game:$('gameName').value.trim(),date:new Date().toISOString(),ms});save()}running=false;elapsed=0;$('clock').textContent='00:00:00';$('timerStatus').textContent='Не запущен';$('startBtn').textContent='▶ Начать';$('stopBtn').disabled=true;render()};
+function renderCalendar(){let y=viewDate.getFullYear(),m=viewDate.getMonth();$('monthTitle').textContent=viewDate.toLocaleDateString('ru-RU',{month:'long',year:'numeric'});let first=new Date(y,m,1).getDay(),offset=(first+6)%7,days=new Date(y,m+1,0).getDate(),g=$('calendarGrid');g.innerHTML='';['Пн','Вт','Ср','Чт','Пт','Сб','Вс'].forEach(x=>{let e=document.createElement('div');e.className='dow';e.textContent=x;g.append(e)});for(let i=0;i<offset;i++){let e=document.createElement('div');e.className='day empty';g.append(e)}for(let n=1;n<=days;n++){let d=new Date(y,m,n),key=dayKey(d),sum=sessions.filter(s=>dayKey(new Date(s.date))===key).reduce((a,s)=>a+s.ms,0),e=document.createElement('button');e.className='day'+(sum?' has':'')+(key===dayKey(new Date())?' today':'')+(key===dayKey(selectedDate)?' selected':'');e.textContent=n;e.onclick=()=>{selectedDate=d;renderCalendar()};g.append(e)}let key=dayKey(selectedDate),list=sessions.filter(s=>dayKey(new Date(s.date))===key),sum=list.reduce((a,s)=>a+s.ms,0);$('dayTitle').textContent=selectedDate.toLocaleDateString('ru-RU',{day:'numeric',month:'long'});$('dayInfo').textContent=sum?`Игровое время: ${duration(sum)} · Сессий: ${list.length}`:'В этот день игровых записей нет.'}
+$('prevMonth').onclick=()=>{viewDate.setMonth(viewDate.getMonth()-1);renderCalendar()};$('nextMonth').onclick=()=>{viewDate.setMonth(viewDate.getMonth()+1);renderCalendar()};
+function renderAchievements(){let t=total(),a=[['🌱','Первый шаг','Сохрани первую игровую сессию',sessions.length>=1],['🎮','Пять сессий','Сохрани 5 игровых сессий',sessions.length>=5],['🏆','Десять сессий','Сохрани 10 игровых сессий',sessions.length>=10],['⏳','Первые 5 часов','Отслеживай 5 часов игрового времени',t>=5*3600000],['⭐','Десять часов','Отслеживай 10 часов игрового времени',t>=10*3600000]];$('achievementList').innerHTML='';a.forEach(x=>{let e=document.createElement('div');e.className='item achievement';e.innerHTML=`<span class="ico">${x[0]}</span><div style="flex:1"><b>${x[1]}</b><div class="muted">${x[2]}</div></div><span class="badge">${x[3]?'Открыто':'Закрыто'}</span>`;$('achievementList').append(e)})}
+document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{document.querySelectorAll('[data-tab]').forEach(x=>x.classList.toggle('active',x===b));['home','calendar','achievements'].forEach(id=>$(id).classList.toggle('hidden',id!==b.dataset.tab));if(b.dataset.tab==='calendar')renderCalendar()});
+render();
+</script>
+</body>
+</html>
